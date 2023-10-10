@@ -1,0 +1,110 @@
+<div  class="container col-md-6 offset-md-3 mt-5">
+    <div *ngIf="!isTableHidden" class="mb-3">
+        <form class="form-inline" id="searchForm">
+        <input type="text" class="form-control" placeholder="Search" name="search" [(ngModel)]="searchText">
+    </form> 
+
+    </div>
+<div *ngIf="!isTableHidden" class="table-responsive">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Mobile</th>
+            <th scope="col">Email</th>
+            <th scope="col">Update</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let c of allContacts | searchContact:searchText">
+          <tr>
+            <th scope="col">{{c.companyBasicId}}</th>
+            <td>{{c.name}}</td>
+            <td>{{c.loginName}}</td>
+            <td>{{c.emailId}}</td>
+            <td>
+                <button class="btn btn-primary" (click)="updateContact(c.companyBasicId, c.companyId)">
+                    Edit
+                </button>
+            </td>
+            <td>
+                <button class="btn btn-danger" (click)="deleteContact(c.companyBasicId)">
+                    Delete
+                </button>
+            </td>
+          </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div *ngIf="isTableHidden">
+    <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+    <div class="card">
+        <h4 class="card-header">Update Contact</h4>
+        <div class="card-body">
+            <form [formGroup]="form" (ngSubmit)="onUpdate()">
+                <div class="mb-3">
+                    <label class="form-label">Company Id</label>
+                    <input type="text" formControlName="companyBasicId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.companyBasicId.errors }"
+                    value="{{updatedContact[0].companyBasicId}}" />
+                    <div *ngIf="submitted && f.companyBasicId.errors" class="invalid-feedback">
+                        <div *ngIf="f.companyBasicId.errors.required">companyBasicId is required</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                    value="{{updatedContact[0].name}}" />
+                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                        <div *ngIf="f.name.errors.required">Name is required</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Login Name</label>
+                    <input type="text" formControlName="loginName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.loginName.errors }"
+                    value="{{updatedContact[0].loginName}}" />
+                    <div *ngIf="submitted && f.loginName.errors" class="invalid-feedback">
+                        <div *ngIf="f.loginName.errors.required">Login Name is required</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">emailId</label>
+                    <input type="text" formControlName="emailId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.emailId }"
+                    value="{{updatedContact[0].emailId}}" />
+                    <div *ngIf="submitted && f.emailId.errors" class="invalid-feedback">
+                        <div *ngIf="f.emailId.errors.required">emailId is required</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" 
+                    value="{{updatedContact[0].password}}"/>
+                    <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                        <div *ngIf="f.password.errors.required">Password is required</div>
+                        <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mobile</label>
+                    <input type="text" formControlName="mobile" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }"
+                    value="{{updatedContact[0].mobile}}" />
+                    <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
+                        <div *ngIf="f.mobile.errors.required">Mobile number is required</div>
+                        <div *ngIf="f.mobile.errors.minlength">Mobile number must hae 10 digits</div>
+                    </div>
+                </div>
+                <div>
+                    <button [disabled]="loading" class="btn btn-primary">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                        Update Contact
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+</div>
